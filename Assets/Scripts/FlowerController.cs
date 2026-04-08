@@ -79,6 +79,12 @@ public class FlowerController : MonoBehaviour
     /// </summary>
     private void EvaluateGrowth()
     {
+        if (health <= 0f)
+        {
+            Debug.Log($"[FlowerWhisper] {species} ({id}) is dead — skipping growth evaluation.");
+            return;
+        }
+
         if (water > 50f && sunlight > 50f)
         {
             TryGrow();
