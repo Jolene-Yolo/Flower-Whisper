@@ -111,6 +111,12 @@ public class FlowerController : MonoBehaviour
         {
             growthStage++;
             Debug.Log($"[FlowerWhisper] {species} ({id}) grew to stage {growthStage}! (roll: {roll:F2})");
+
+            // When a flower reaches full bloom, register it in the collection
+            if (growthStage >= 5 && FlowerCollection.Instance != null)
+            {
+                FlowerCollection.Instance.TryAddSpecies(species);
+            }
         }
         else
         {
