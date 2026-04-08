@@ -51,6 +51,20 @@ public class FlowerVisualGrowth : MonoBehaviour
     private Vector3 targetScale;
     private Color targetColor;
 
+    /// <summary>
+    /// When true, SmoothTransition skips writing to localScale.
+    /// Used by FlowerInteraction to prevent scale fights during pulse animation.
+    /// </summary>
+    [HideInInspector]
+    public bool scalePaused;
+
+    /// <summary>
+    /// The current growth-stage target scale. FlowerInteraction reads this
+    /// to use as the base for its pulse animation instead of capturing a
+    /// raw localScale snapshot that may be mid-lerp.
+    /// </summary>
+    public Vector3 TargetScale => targetScale;
+
     private void Start()
     {
         flower = GetComponent<FlowerController>();
@@ -124,8 +138,11 @@ public class FlowerVisualGrowth : MonoBehaviour
     {
         float lerpFactor = 1f - Mathf.Exp(-transitionSpeed * Time.deltaTime);
 
-        // Smooth scale
-        transform.localScale = Vector3.Lerp(transform.localScale, targetScale, lerpFactor);
+        // Smooth scale (skip while pulse animation is active)
+        if (!scalePaused)
+        {
+            transform.localScale = Vector3.Lerp(transform.localScale, targetScale, lerpFactor);
+        }
 
         // Smooth color
         if (bloomRenderer != null)

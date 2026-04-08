@@ -107,14 +107,23 @@ public class FlowerInteraction : MonoBehaviour
 
     private void SelectFlower(FlowerController flower)
     {
-        // Restore previous flower's scale if still pulsing
+        // Restore previous flower's scale and unpause its growth visuals
         if (isPulsing && selectedFlower != null)
         {
             selectedFlower.transform.localScale = originalScale;
+            SetScalePaused(selectedFlower, false);
         }
 
         selectedFlower = flower;
-        originalScale = flower.transform.localScale;
+
+        // Use the growth system's target scale as the base, so the pulse
+        // is always relative to the correct growth-stage size.
+        FlowerVisualGrowth visualGrowth = flower.GetComponent<FlowerVisualGrowth>();
+        originalScale = (visualGrowth != null) ? visualGrowth.TargetScale : flower.transform.localScale;
+
+        // Pause growth-scale writes so they don't fight the pulse animation
+        SetScalePaused(flower, true);
+
         pulseTimer = 0f;
         isPulsing = true;
     }
@@ -124,6 +133,7 @@ public class FlowerInteraction : MonoBehaviour
         if (selectedFlower != null && isPulsing)
         {
             selectedFlower.transform.localScale = originalScale;
+            SetScalePaused(selectedFlower, false);
         }
 
         selectedFlower = null;
@@ -157,9 +167,23 @@ public class FlowerInteraction : MonoBehaviour
         }
         else
         {
-            // Animation complete
+            // Animation complete — restore scale and unpause growth visuals
             selectedFlower.transform.localScale = originalScale;
+            SetScalePaused(selectedFlower, false);
             isPulsing = false;
+        }
+    }
+
+    /// <summary>
+    /// Sets or clears the scalePaused flag on the flower's FlowerVisualGrowth
+    /// component (if present) to prevent scale write conflicts during pulse.
+    /// </summary>
+    private void SetScalePaused(FlowerController flower, bool paused)
+    {
+        FlowerVisualGrowth visualGrowth = flower.GetComponent<FlowerVisualGrowth>();
+        if (visualGrowth != null)
+        {
+            visualGrowth.scalePaused = paused;
         }
     }
 }
