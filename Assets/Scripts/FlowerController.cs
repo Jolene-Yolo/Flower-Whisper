@@ -38,6 +38,7 @@ public class FlowerController : MonoBehaviour
 
     [Header("Growth System Settings")]
     [Tooltip("Seconds between each growth evaluation tick.")]
+    [Min(0.01f)]
     public float updateInterval = 10f;
 
     [Tooltip("Probability (0-1) of advancing a growth stage when conditions are met.")]
