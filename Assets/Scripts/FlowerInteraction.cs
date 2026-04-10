@@ -32,6 +32,7 @@ public class FlowerInteraction : MonoBehaviour
 
     /// <summary>Currently selected flower, or null if none.</summary>
     private FlowerController selectedFlower;
+    public FlowerController SelectedFlower => selectedFlower;
 
     /// <summary>Original scale of the selected flower before animation.</summary>
     private Vector3 originalScale;
