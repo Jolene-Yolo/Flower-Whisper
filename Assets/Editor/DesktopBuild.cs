@@ -1,5 +1,6 @@
 using System.IO;
 using UnityEditor;
+using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 
 public static class DesktopBuild
@@ -37,7 +38,7 @@ public static class DesktopBuild
             return;
         }
 
-        throw new BuildFailedException($"Build failed with result: {summary.result}");
+        throw new System.Exception($"Build failed with result: {summary.result}");
     }
 
     // CLI entry point:
@@ -50,10 +51,10 @@ public static class DesktopBuild
     private static void EnsureBuildScenes()
     {
         if (!File.Exists(MainScenePath))
-            throw new BuildFailedException($"Main scene not found: {MainScenePath}");
+            throw new System.Exception($"Main scene not found: {MainScenePath}");
 
         if (!File.Exists(SampleScenePath))
-            throw new BuildFailedException($"Sample scene not found: {SampleScenePath}");
+            throw new System.Exception($"Sample scene not found: {SampleScenePath}");
 
         EditorBuildSettings.scenes = new[]
         {
