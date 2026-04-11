@@ -137,7 +137,7 @@ public class PerformanceOptimizer : MonoBehaviour
         textGO.transform.SetParent(canvas.transform, false);
 
         fpsText = textGO.AddComponent<Text>();
-        fpsText.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+        fpsText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         fpsText.fontSize = 20;
         fpsText.alignment = TextAnchor.UpperRight;
         fpsText.color = Color.white;
